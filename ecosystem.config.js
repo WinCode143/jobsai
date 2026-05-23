@@ -19,8 +19,9 @@ module.exports = {
       args: "src/jobs/sync-worker.ts",
       cwd: "/var/www/jobsai",
       instances: 1,
-      autorestart: true,
+      autorestart: false,
       watch: false,
+      cron_restart: "0 */6 * * *",
       env: {
         NODE_ENV: "production",
       },

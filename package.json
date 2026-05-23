@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "node_modules/.bin/prisma generate && node_modules/.bin/next build --no-turbo",
+    "build": "npx prisma generate && npx next build --no-turbo",
     "start": "next start",
     "lint": "eslint"
   },

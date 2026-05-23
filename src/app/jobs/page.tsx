@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -57,7 +57,7 @@ function formatSalary(min: number | null, max: number | null, currency: string |
   if (min) return `desde ${fmt(min)}`;
 }
 
-export default function JobsPage() {
+function JobsContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [jobs, setJobs] = useState<Job[]>([]);
@@ -306,5 +306,13 @@ export default function JobsPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function JobsPage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center py-20 text-gray-400">Cargando...</div>}>
+      <JobsContent />
+    </Suspense>
   );
 }

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-// @ts-expect-error pdf-parse lacks proper ESM types
-import pdfParse from "pdf-parse/lib/pdf-parse.js";
+
+export const runtime = "nodejs";
 import { parseCVText, profileToEmbeddingText } from "@/lib/cv-parser";
 import { generateEmbedding } from "@/lib/embeddings";
 import { findMatchingJobs, saveSearchResult } from "@/lib/matcher";
@@ -23,6 +23,8 @@ export async function POST(request: Request) {
   }
 
   const buffer = Buffer.from(await file.arrayBuffer());
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const pdfParse = require("pdf-parse");
   const { text: rawText } = await pdfParse(buffer);
 
   if (!rawText.trim()) {

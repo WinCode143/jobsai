@@ -1,4 +1,4 @@
-export type JobSource = "remoteok" | "wwr" | "remotive" | "jobicy";
+export type JobSource = "remoteok" | "wwr" | "remotive" | "jobicy" | "himalayas" | "workingnomads";
 
 export interface RawJob {
   title: string;

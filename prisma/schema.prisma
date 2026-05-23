@@ -1,0 +1,55 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  extensions = [pgvector(map: "vector")]
+}
+
+model Job {
+  id          String   @id @default(cuid())
+  title       String
+  company     String
+  description String
+  url         String   @unique
+  location    String?
+  salaryMin   Int?
+  salaryMax   Int?
+  currency    String?
+  tags        String[]
+  source      String   // "remoteok" | "wwr" | "remotive" | "jobicy"
+  postedAt    DateTime
+  embedding   Unsupported("vector(768)")?
+  createdAt   DateTime @default(now())
+
+  searchResults SearchResult[]
+
+  @@index([source])
+  @@index([postedAt])
+}
+
+model UserProfile {
+  id            String   @id @default(cuid())
+  userId        String?
+  rawCvText     String
+  parsedProfile Json
+  embedding     Unsupported("vector(768)")?
+  createdAt     DateTime @default(now())
+
+  searchResults SearchResult[]
+}
+
+model SearchResult {
+  id              String      @id @default(cuid())
+  userProfileId   String
+  jobId           String
+  similarityScore Float
+  createdAt       DateTime    @default(now())
+
+  userProfile UserProfile @relation(fields: [userProfileId], references: [id])
+  job         Job         @relation(fields: [jobId], references: [id])
+
+  @@index([userProfileId])
+}

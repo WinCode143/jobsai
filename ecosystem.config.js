@@ -15,9 +15,8 @@ module.exports = {
     },
     {
       name: "jobsai-worker",
-      script: "src/jobs/sync-worker.ts",
-      interpreter: "node",
-      interpreter_args: "--import tsx/esm",
+      script: "node_modules/.bin/tsx",
+      args: "src/jobs/sync-worker.ts",
       cwd: "/var/www/jobsai",
       instances: 1,
       autorestart: true,

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { prisma } from "@/lib/prisma";
 
 const CATEGORIES = [
   { label: "Tecnología", icon: "💻", slug: "tech", count: "2.4k+" },
@@ -17,14 +18,14 @@ const HOW_IT_WORKS = [
   { step: "03", title: "Recibís tus matches", desc: "Las ofertas más compatibles rankeadas por score de compatibilidad.", icon: "✨" },
 ];
 
-const STATS = [
-  { value: "10k+", label: "Ofertas activas" },
-  { value: "50+", label: "Países" },
-  { value: "4", label: "Fuentes de empleo" },
-  { value: "100%", label: "Remoto" },
-];
-
-export default function Home() {
+export default async function Home() {
+  const totalJobs = await prisma.job.count().catch(() => 0);
+  const STATS = [
+    { value: totalJobs > 0 ? `${totalJobs.toLocaleString()}+` : "—", label: "Ofertas activas" },
+    { value: "50+", label: "Países" },
+    { value: "6", label: "Fuentes de empleo" },
+    { value: "100%", label: "Gratis" },
+  ];
   return (
     <div>
       {/* Hero */}

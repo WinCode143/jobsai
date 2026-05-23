@@ -20,7 +20,7 @@ interface JobicyResponse {
 }
 
 export async function fetchJobicy(): Promise<RawJob[]> {
-  const res = await fetch("https://jobicy.com/api/v2/remote-jobs?count=50&geo=anywhere");
+  const res = await fetch("https://jobicy.com/api/v2/remote-jobs?count=50");
   if (!res.ok) throw new Error(`Jobicy fetch failed: ${res.status}`);
 
   const { jobs } = (await res.json()) as JobicyResponse;

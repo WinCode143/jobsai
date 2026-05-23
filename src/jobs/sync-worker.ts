@@ -1,6 +1,6 @@
 import "dotenv/config";
 import { prisma } from "../lib/prisma";
-import { fetchRemoteOK, fetchRemotive, fetchWWR, fetchJobicy } from "../lib/fetchers";
+import { fetchRemoteOK, fetchRemotive, fetchWWR, fetchJobicy, fetchHimalayas, fetchWorkingNomads } from "../lib/fetchers";
 import { generateEmbedding, jobToEmbeddingText } from "../lib/embeddings";
 import type { RawJob } from "../lib/types";
 
@@ -31,11 +31,13 @@ async function upsertJob(job: RawJob): Promise<void> {
 async function runSync() {
   console.log(`[${new Date().toISOString()}] Starting job sync...`);
 
-  const [remoteok, remotive, wwr, jobicy] = await Promise.allSettled([
+  const [remoteok, remotive, wwr, jobicy, himalayas, workingnomads] = await Promise.allSettled([
     fetchRemoteOK(),
     fetchRemotive(),
     fetchWWR(),
     fetchJobicy(),
+    fetchHimalayas(),
+    fetchWorkingNomads(),
   ]);
 
   const allJobs: RawJob[] = [
@@ -43,12 +45,16 @@ async function runSync() {
     ...(remotive.status === "fulfilled" ? remotive.value : []),
     ...(wwr.status === "fulfilled" ? wwr.value : []),
     ...(jobicy.status === "fulfilled" ? jobicy.value : []),
+    ...(himalayas.status === "fulfilled" ? himalayas.value : []),
+    ...(workingnomads.status === "fulfilled" ? workingnomads.value : []),
   ];
 
   if (remoteok.status === "rejected") console.error("RemoteOK failed:", remoteok.reason);
   if (remotive.status === "rejected") console.error("Remotive failed:", remotive.reason);
   if (wwr.status === "rejected") console.error("WWR failed:", wwr.reason);
   if (jobicy.status === "rejected") console.error("Jobicy failed:", jobicy.reason);
+  if (himalayas.status === "rejected") console.error("Himalayas failed:", himalayas.reason);
+  if (workingnomads.status === "rejected") console.error("WorkingNomads failed:", workingnomads.reason);
 
   console.log(`Fetched ${allJobs.length} jobs total`);
 

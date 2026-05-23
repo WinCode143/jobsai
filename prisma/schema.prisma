@@ -22,7 +22,7 @@ model Job {
   tags        String[]
   source      String   // "remoteok" | "wwr" | "remotive" | "jobicy"
   postedAt    DateTime
-  embedding   Unsupported("vector(768)")?
+  embedding   Unsupported("vector(3072)")?
   createdAt   DateTime @default(now())
 
   searchResults SearchResult[]
@@ -36,7 +36,7 @@ model UserProfile {
   userId        String?
   rawCvText     String
   parsedProfile Json
-  embedding     Unsupported("vector(768)")?
+  embedding     Unsupported("vector(3072)")?
   createdAt     DateTime @default(now())
 
   searchResults SearchResult[]

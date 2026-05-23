@@ -24,10 +24,10 @@ jobs:
             git pull origin main
 
             echo "=== Installing dependencies ==="
-            npm ci --production=false
+            npm install
 
             echo "=== Running migrations ==="
-            npx prisma migrate deploy
+            node_modules/.bin/prisma migrate deploy
 
             echo "=== Building ==="
             npm run build
